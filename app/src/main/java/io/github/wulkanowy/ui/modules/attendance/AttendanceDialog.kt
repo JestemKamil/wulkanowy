@@ -6,10 +6,12 @@ import android.view.View
 import androidx.core.os.bundleOf
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.databinding.DialogAttendanceBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
 import io.github.wulkanowy.utils.descriptionRes
+import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.serializable
 import io.github.wulkanowy.utils.toFormattedString
 
@@ -44,6 +46,15 @@ class AttendanceDialog : BaseDialogFragment<DialogAttendanceBinding>() {
         with(binding) {
             attendanceDialogSubjectValue.text = attendance.subject
             attendanceDialogDescriptionValue.setText(attendance.descriptionRes)
+            attendanceDialogDescriptionValue.setTextColor(
+                root.context.getThemeAttrColor(
+                    if (attendance.absence && !attendance.excused) R.attr.colorAttendanceAbsence
+                    else if (attendance.absence) R.attr.colorAttendanceAbsenceExcused
+                    else if (attendance.lateness) R.attr.colorAttendanceLateness
+                    else android.R.attr.textColorSecondary
+                )
+            )
+
             attendanceDialogDateValue.text = attendance.date.toFormattedString()
             attendanceDialogNumberValue.text = attendance.number.toString()
             attendanceDialogClose.setOnClickListener { dismiss() }
