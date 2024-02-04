@@ -55,8 +55,7 @@ class AttendanceAdapter @Inject constructor() :
 
             if (item.exemption) {
                 attendanceItemDescription.setTypeface(null, Typeface.BOLD)
-            }
-            else {
+            } else {
                 attendanceItemDescription.setTypeface(null, Typeface.NORMAL)
             }
 
