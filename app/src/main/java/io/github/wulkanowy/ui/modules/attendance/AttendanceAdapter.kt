@@ -44,17 +44,21 @@ class AttendanceAdapter @Inject constructor() :
 
             attendanceItemDescription.setTextColor(
                 root.context.getThemeAttrColor(
-                    if (item.absence && !item.excused) R.attr.colorAttendanceAbsence
-                    else if (item.absence) R.attr.colorAttendanceAbsenceExcused
-                    else if (item.lateness) R.attr.colorAttendanceLateness
-                    else android.R.attr.textColorSecondary
+                    when {
+                        item.absence && !item.excused -> R.attr.colorAttendanceAbsence
+                        item.absence -> R.attr.colorAttendanceAbsenceExcused
+                        item.lateness -> R.attr.colorAttendanceLateness
+                        else -> android.R.attr.textColorSecondary
+                    }
                 )
             )
 
-            if (item.exemption)
+            if (item.exemption) {
                 attendanceItemDescription.setTypeface(null, Typeface.BOLD)
-            else
+            }
+            else {
                 attendanceItemDescription.setTypeface(null, Typeface.NORMAL)
+            }
 
             attendanceItemAlert.isVisible =
                 item.let { (it.absence && !it.excused) || (it.lateness && !it.excused) }

@@ -48,10 +48,12 @@ class AttendanceDialog : BaseDialogFragment<DialogAttendanceBinding>() {
             attendanceDialogDescriptionValue.setText(attendance.descriptionRes)
             attendanceDialogDescriptionValue.setTextColor(
                 root.context.getThemeAttrColor(
-                    if (attendance.absence && !attendance.excused) R.attr.colorAttendanceAbsence
-                    else if (attendance.absence) R.attr.colorAttendanceAbsenceExcused
-                    else if (attendance.lateness) R.attr.colorAttendanceLateness
-                    else android.R.attr.textColorSecondary
+                    when {
+                        attendance.absence && !attendance.excused -> R.attr.colorAttendanceAbsence
+                        attendance.absence -> R.attr.colorAttendanceAbsenceExcused
+                        attendance.lateness -> R.attr.colorAttendanceLateness
+                        else -> android.R.attr.textColorSecondary
+                    }
                 )
             )
 
