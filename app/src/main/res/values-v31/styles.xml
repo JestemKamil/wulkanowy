@@ -35,7 +35,6 @@
         <item name="colorTimetableCanceled">@color/timetable_canceled_light</item>
         <item name="colorTimetableChange">@color/timetable_change_light</item>
         <item name="colorAttendanceAbsence">@color/attendance_absence_light</item>
-        <item name="colorAttendanceAbsenceExcused">@color/attendance_absence_excused_light</item>
         <item name="colorAttendanceLateness">@color/attendance_lateness_light</item>
 
         <item name="colorError">@color/colorError</item>

@@ -46,14 +46,13 @@ class AttendanceAdapter @Inject constructor() :
                 root.context.getThemeAttrColor(
                     when {
                         item.absence && !item.excused -> R.attr.colorAttendanceAbsence
-                        item.absence -> R.attr.colorAttendanceAbsenceExcused
-                        item.lateness -> R.attr.colorAttendanceLateness
+                        item.lateness && !item.excused -> R.attr.colorAttendanceLateness
                         else -> android.R.attr.textColorSecondary
                     }
                 )
             )
 
-            if (item.exemption) {
+            if (item.exemption || item.excused) {
                 attendanceItemDescription.setTypeface(null, Typeface.BOLD)
             } else {
                 attendanceItemDescription.setTypeface(null, Typeface.NORMAL)
@@ -61,6 +60,14 @@ class AttendanceAdapter @Inject constructor() :
 
             attendanceItemAlert.isVisible =
                 item.let { (it.absence && !it.excused) || (it.lateness && !it.excused) }
+
+            attendanceItemAlert.setColorFilter(root.context.getThemeAttrColor(
+                when{
+                    item.absence && !item.excused -> R.attr.colorAttendanceAbsence
+                    item.lateness && !item.excused -> R.attr.colorAttendanceLateness
+                    else -> android.R.attr.colorPrimary
+                }
+            ))
             attendanceItemNumber.visibility = View.GONE
             attendanceItemExcuseInfo.visibility = View.GONE
             attendanceItemExcuseCheckbox.visibility = View.GONE

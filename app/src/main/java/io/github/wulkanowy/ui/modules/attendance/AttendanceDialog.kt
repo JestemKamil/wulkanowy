@@ -50,8 +50,7 @@ class AttendanceDialog : BaseDialogFragment<DialogAttendanceBinding>() {
                 root.context.getThemeAttrColor(
                     when {
                         attendance.absence && !attendance.excused -> R.attr.colorAttendanceAbsence
-                        attendance.absence -> R.attr.colorAttendanceAbsenceExcused
-                        attendance.lateness -> R.attr.colorAttendanceLateness
+                        attendance.lateness && !attendance.excused -> R.attr.colorAttendanceLateness
                         else -> android.R.attr.textColorSecondary
                     }
                 )

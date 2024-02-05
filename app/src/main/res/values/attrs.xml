@@ -8,6 +8,5 @@
     <attr name="colorMessageHigh" format="color" />
     <attr name="colorOnMessageHigh" format="color" />
     <attr name="colorAttendanceAbsence" format="color" />
-    <attr name="colorAttendanceAbsenceExcused" format="color" />
     <attr name="colorAttendanceLateness" format="color" />
 </resources>
