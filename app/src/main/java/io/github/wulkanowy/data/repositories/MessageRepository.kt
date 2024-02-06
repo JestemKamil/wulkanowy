@@ -86,7 +86,12 @@ class MessageRepository @Inject constructor(
         saveFetchResult = { old, new ->
             messagesDb.deleteAll(old uniqueSubtract new)
             messagesDb.insertAll((new uniqueSubtract old).onEach {
-                it.isNotified = !notify
+                val muted = isMuted(it)
+                it.isNotified = !notify || muted
+                it.unread = when {
+                    muted -> false
+                    else -> it.unread
+                }
             })
 
             refreshHelper.updateLastRefreshTimestamp(
@@ -236,4 +241,14 @@ class MessageRepository @Inject constructor(
             context.getString(R.string.pref_key_message_draft),
             value?.let { json.encodeToString(it) }
         )
+
+    companion object {
+        fun isMuted(message: Message): Boolean {
+
+            return when(message.correspondents){
+                "Kowalski Jan11 - P - (Fake123456)" -> true
+                else -> false
+            }
+        }
+    }
 }

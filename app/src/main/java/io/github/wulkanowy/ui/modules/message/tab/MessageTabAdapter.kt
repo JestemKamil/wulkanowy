@@ -11,6 +11,7 @@ import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.databinding.ItemMessageBinding
 import io.github.wulkanowy.databinding.ItemMessageChipsBinding
 import io.github.wulkanowy.utils.getCompatColor
@@ -137,7 +138,12 @@ class MessageTabAdapter @Inject constructor() :
                 ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(currentTextColor))
                 isVisible = message.hasAttachments
             }
-            messageItemUnreadIndicator.isVisible = message.unread
+            messageItemUnreadIndicator.isVisible = message.unread || MessageRepository.isMuted(message)
+
+            when(MessageRepository.isMuted(message)) {
+                true -> messageItemUnreadIndicator.setImageResource(R.drawable.ic_notifications_off)
+                else -> messageItemUnreadIndicator.setImageResource(R.drawable.ic_circle_notification)
+            }
 
             root.setOnClickListener {
                 holder.bindingAdapterPosition.let {
