@@ -53,7 +53,7 @@ class MessageTabAdapter @Inject constructor() :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
-        return when (MessageItemViewType.values()[viewType]) {
+        return when (MessageItemViewType.entries[viewType]) {
             MessageItemViewType.FILTERS -> HeaderViewHolder(
                 ItemMessageChipsBinding.inflate(inflater, parent, false)
             )
