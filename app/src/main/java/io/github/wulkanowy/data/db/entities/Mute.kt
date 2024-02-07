@@ -9,6 +9,9 @@ import java.io.Serializable
 data class Mute(
     @ColumnInfo(name = "author")
     val author: String,
+
+    @ColumnInfo(name = "user_id")
+    val userId: Long
 ) : Serializable {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

@@ -39,7 +39,11 @@ data class Message(
     val unreadBy: Int?,
 
     @ColumnInfo(name = "has_attachments")
-    val hasAttachments: Boolean
+    val hasAttachments: Boolean,
+
+    @ColumnInfo(name = "is_muted", defaultValue = "0")
+    var isMuted: Boolean = false
+
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
@@ -52,6 +56,4 @@ data class Message(
     var sender: String? = null
     var recipients: String? = null
 
-    @ColumnInfo(name = "is_muted", defaultValue = "0")
-    var isMuted: Boolean = false
 }

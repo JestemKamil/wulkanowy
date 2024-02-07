@@ -44,7 +44,8 @@ import javax.inject.Singleton
 @Singleton
 class MessageRepository @Inject constructor(
     private val messagesDb: MessagesDao,
-    private val mutesDao: MutesDao,
+    private val studentRepository: StudentRepository,
+    private val mutesDb: MutesDao,
     private val messageAttachmentDao: MessageAttachmentDao,
     private val sdk: Sdk,
     @ApplicationContext private val context: Context,
@@ -54,7 +55,6 @@ class MessageRepository @Inject constructor(
     private val mailboxDao: MailboxDao,
     private val getMailboxByStudentUseCase: GetMailboxByStudentUseCase,
 ) {
-
     private val saveFetchResultMutex = Mutex()
 
     private val messagesCacheKey = "message"
@@ -247,21 +247,24 @@ class MessageRepository @Inject constructor(
         )
 
 
-    //init public functions: mute, unmute, checkMute
 
     private suspend fun isMuted(author: String): Boolean {
-        return mutesDao.checkMute(author)
+        val student = studentRepository.getCurrentStudent()
+
+        return mutesDb.checkMute(author, student.id)
     }
 
     suspend fun muteMessage(author: String, email: String) {
         if(isMuted(author)) return
-        mutesDao.insertMute(Mute(author))
+        val student = studentRepository.getCurrentStudent()
+        mutesDb.insertMute(Mute(author, student.id))
         messagesDb.muteMessagesByAuthor(author, email)
     }
 
     suspend fun unmuteMessage(author: String, email: String) {
         if(!isMuted(author)) return
-        mutesDao.deleteMute(author)
+        val student = studentRepository.getCurrentStudent()
+        mutesDb.deleteMute(author, student.id)
         messagesDb.unmuteMessagesByAuthor(author, email)
     }
 }
