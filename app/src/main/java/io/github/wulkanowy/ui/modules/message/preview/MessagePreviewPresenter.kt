@@ -250,7 +250,17 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     fun onMute(): Boolean{
+        message ?: return false
 
+        message!!.isMuted = !message!!.isMuted
+        presenterScope.launch {
+            when (message!!.isMuted) {
+                true -> messageRepository.muteMessage(message!!.correspondents, message!!.email)
+                false -> messageRepository.unmuteMessage(message!!.correspondents, message!!.email)
+            }
+
+        }
+        view?.updateMuteButton(message!!.isMuted)
         return true
     }
 }

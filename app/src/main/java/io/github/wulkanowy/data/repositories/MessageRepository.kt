@@ -12,6 +12,7 @@ import io.github.wulkanowy.data.db.dao.MutesDao
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
+import io.github.wulkanowy.data.db.entities.Mute
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
@@ -88,7 +89,7 @@ class MessageRepository @Inject constructor(
         saveFetchResult = { old, new ->
             messagesDb.deleteAll(old uniqueSubtract new)
             messagesDb.insertAll((new uniqueSubtract old).onEach {
-                val muted = mutesDao.checkMute(it.correspondents)
+                val muted = isMuted(it.correspondents)
                 it.isMuted = muted
                 it.isNotified = !notify || muted
                 it.unread = when {
@@ -245,4 +246,22 @@ class MessageRepository @Inject constructor(
             value?.let { json.encodeToString(it) }
         )
 
+
+    //init public functions: mute, unmute, checkMute
+
+    private suspend fun isMuted(author: String): Boolean {
+        return mutesDao.checkMute(author)
+    }
+
+    suspend fun muteMessage(author: String, email: String) {
+        if(isMuted(author)) return
+        mutesDao.insertMute(Mute(author))
+        messagesDb.muteMessagesByAuthor(author, email)
+    }
+
+    suspend fun unmuteMessage(author: String, email: String) {
+        if(!isMuted(author)) return
+        mutesDao.deleteMute(author)
+        messagesDb.unmuteMessagesByAuthor(author, email)
+    }
 }
