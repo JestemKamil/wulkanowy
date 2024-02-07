@@ -853,4 +853,6 @@
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
     <string name="error_field_required">This field is required</string>
+    <string name="message_mute">Mute</string>
+    <string name="message_unmute">Unmute</string>
 </resources>

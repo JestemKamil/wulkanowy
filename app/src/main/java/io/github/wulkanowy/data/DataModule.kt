@@ -253,4 +253,8 @@ internal class DataModule {
     @Singleton
     @Provides
     fun provideAdminMessageDao(database: AppDatabase) = database.adminMessagesDao
+
+    @Singleton
+    @Provides
+    fun provideMutesDao(database: AppDatabase) = database.mutesDao
 }

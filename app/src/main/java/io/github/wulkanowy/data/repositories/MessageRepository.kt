@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
+import io.github.wulkanowy.data.db.dao.MutesDao
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
@@ -42,6 +43,7 @@ import javax.inject.Singleton
 @Singleton
 class MessageRepository @Inject constructor(
     private val messagesDb: MessagesDao,
+    private val mutesDao: MutesDao,
     private val messageAttachmentDao: MessageAttachmentDao,
     private val sdk: Sdk,
     @ApplicationContext private val context: Context,
@@ -86,7 +88,8 @@ class MessageRepository @Inject constructor(
         saveFetchResult = { old, new ->
             messagesDb.deleteAll(old uniqueSubtract new)
             messagesDb.insertAll((new uniqueSubtract old).onEach {
-                val muted = isMuted(it)
+                val muted = mutesDao.checkMute(it.correspondents)
+                it.isMuted = muted
                 it.isNotified = !notify || muted
                 it.unread = when {
                     muted -> false
@@ -242,13 +245,4 @@ class MessageRepository @Inject constructor(
             value?.let { json.encodeToString(it) }
         )
 
-    companion object {
-        fun isMuted(message: Message): Boolean {
-
-            return when(message.correspondents){
-                "Kowalski Jan11 - P - (Fake123456)" -> true
-                else -> false
-            }
-        }
-    }
 }

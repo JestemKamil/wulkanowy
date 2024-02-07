@@ -51,4 +51,7 @@ data class Message(
     var content: String = ""
     var sender: String? = null
     var recipients: String? = null
+
+    @ColumnInfo(name = "is_muted", defaultValue = "0")
+    var isMuted: Boolean = false
 }

@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.db
 
+import io.github.wulkanowy.data.db.migrations.Migration59
 import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
@@ -24,6 +25,7 @@ import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.dao.MobileDeviceDao
+import io.github.wulkanowy.data.db.dao.MutesDao
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.dao.NotificationDao
 import io.github.wulkanowy.data.db.dao.RecipientDao
@@ -54,6 +56,7 @@ import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.db.entities.MobileDevice
+import io.github.wulkanowy.data.db.entities.Mute
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Notification
 import io.github.wulkanowy.data.db.entities.Recipient
@@ -154,7 +157,8 @@ import javax.inject.Singleton
         TimetableHeader::class,
         SchoolAnnouncement::class,
         Notification::class,
-        AdminMessage::class
+        AdminMessage::class,
+        Mute::class,
     ],
     autoMigrations = [
         AutoMigration(from = 44, to = 45),
@@ -173,7 +177,7 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 58
+        const val VERSION_SCHEMA = 59
 
         fun getMigrations(sharedPrefProvider: SharedPrefProvider, appInfo: AppInfo) = arrayOf(
             Migration2(),
@@ -225,6 +229,7 @@ abstract class AppDatabase : RoomDatabase() {
             Migration51(),
             Migration53(),
             Migration54(),
+            Migration59(),
         )
 
         fun newInstance(
@@ -298,4 +303,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val notificationDao: NotificationDao
 
     abstract val adminMessagesDao: AdminMessageDao
+
+    abstract val mutesDao: MutesDao
 }

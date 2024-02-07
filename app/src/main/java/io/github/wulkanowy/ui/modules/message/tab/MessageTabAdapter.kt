@@ -138,9 +138,9 @@ class MessageTabAdapter @Inject constructor() :
                 ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(currentTextColor))
                 isVisible = message.hasAttachments
             }
-            messageItemUnreadIndicator.isVisible = message.unread || MessageRepository.isMuted(message)
+            messageItemUnreadIndicator.isVisible = message.unread || message.isMuted
 
-            when(MessageRepository.isMuted(message)) {
+            when(message.isMuted) {
                 true -> messageItemUnreadIndicator.setImageResource(R.drawable.ic_notifications_off)
                 else -> messageItemUnreadIndicator.setImageResource(R.drawable.ic_circle_notification)
             }
