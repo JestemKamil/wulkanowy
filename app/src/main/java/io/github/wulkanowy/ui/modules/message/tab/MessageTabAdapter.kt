@@ -11,7 +11,6 @@ import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.databinding.ItemMessageBinding
 import io.github.wulkanowy.databinding.ItemMessageChipsBinding
 import io.github.wulkanowy.utils.getCompatColor
