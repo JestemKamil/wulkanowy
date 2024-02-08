@@ -10,11 +10,11 @@ import io.github.wulkanowy.data.db.entities.Mute
 interface MutesDao : BaseDao<Mute> {
 
     @Query("SELECT COUNT(*) FROM mutes WHERE author = :author AND user_id = :userId")
-    suspend fun checkMute(author: String, userId: Long): Boolean
+    suspend fun checkMute(author: String, userId: Int): Boolean
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMute(mute: Mute): Long
 
     @Query("DELETE FROM mutes WHERE author = :author AND user_id = :userId")
-    suspend fun deleteMute(author: String, userId: Long)
+    suspend fun deleteMute(author: String, userId: Int)
 }

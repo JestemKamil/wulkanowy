@@ -251,20 +251,20 @@ class MessageRepository @Inject constructor(
     private suspend fun isMuted(author: String): Boolean {
         val student = studentRepository.getCurrentStudent()
 
-        return mutesDb.checkMute(author, student.id)
+        return mutesDb.checkMute(author, student.userLoginId)
     }
 
-    suspend fun muteMessage(author: String, email: String) {
+    suspend fun muteMessage(author: String, mailboxKey: String) {
         if(isMuted(author)) return
         val student = studentRepository.getCurrentStudent()
-        mutesDb.insertMute(Mute(author, student.id))
-        messagesDb.muteMessagesByAuthor(author, email)
+        mutesDb.insertMute(Mute(author, student.userLoginId))
+        messagesDb.muteMessagesByAuthor(author, mailboxKey)
     }
 
-    suspend fun unmuteMessage(author: String, email: String) {
+    suspend fun unmuteMessage(author: String, mailboxKey: String) {
         if(!isMuted(author)) return
         val student = studentRepository.getCurrentStudent()
-        mutesDb.deleteMute(author, student.id)
-        messagesDb.unmuteMessagesByAuthor(author, email)
+        mutesDb.deleteMute(author, student.userLoginId)
+        messagesDb.unmuteMessagesByAuthor(author, mailboxKey)
     }
 }

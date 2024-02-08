@@ -11,7 +11,7 @@ data class Mute(
     val author: String,
 
     @ColumnInfo(name = "user_id")
-    val userId: Long
+    val userId: Int
 ) : Serializable {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

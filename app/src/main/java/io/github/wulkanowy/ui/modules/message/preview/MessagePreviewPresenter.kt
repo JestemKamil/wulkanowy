@@ -255,8 +255,8 @@ class MessagePreviewPresenter @Inject constructor(
         message!!.isMuted = !message!!.isMuted
         presenterScope.launch {
             when (message!!.isMuted) {
-                true -> messageRepository.muteMessage(message!!.correspondents, message!!.email)
-                false -> messageRepository.unmuteMessage(message!!.correspondents, message!!.email)
+                true -> messageRepository.muteMessage(message!!.correspondents, message!!.mailboxKey)
+                false -> messageRepository.unmuteMessage(message!!.correspondents, message!!.mailboxKey)
             }
 
         }
