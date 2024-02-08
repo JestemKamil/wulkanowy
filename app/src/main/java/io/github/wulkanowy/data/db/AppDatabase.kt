@@ -1,6 +1,6 @@
 package io.github.wulkanowy.data.db
 
-import io.github.wulkanowy.data.db.migrations.Migration59
+import Migration60
 import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
@@ -121,7 +121,6 @@ import io.github.wulkanowy.data.db.migrations.Migration55
 import io.github.wulkanowy.data.db.migrations.Migration57
 import io.github.wulkanowy.data.db.migrations.Migration58
 import io.github.wulkanowy.data.db.migrations.Migration6
-import io.github.wulkanowy.data.db.migrations.Migration60
 import io.github.wulkanowy.data.db.migrations.Migration7
 import io.github.wulkanowy.data.db.migrations.Migration8
 import io.github.wulkanowy.data.db.migrations.Migration9
@@ -234,7 +233,6 @@ abstract class AppDatabase : RoomDatabase() {
             Migration51(),
             Migration53(),
             Migration54(),
-            Migration59(),
             Migration60(),
         )
 
