@@ -62,43 +62,35 @@ class MessagePreviewPresenter @Inject constructor(
                 message = messageToLoad,
                 markAsRead = !preferencesRepository.isIncognitoMode,
             )
-        }
-            .logResourceStatus("message ${messageToLoad.messageId} preview")
-            .onResourceData {
-                if (it != null) {
-                    message = it.message
-                    attachments = it.attachments
-                    view?.apply {
-                        setMessageWithAttachment(it)
-                        showContent(true)
-                        initOptions()
-                        updateMuteToggleButton(it.message.isMuted)
-                        if (preferencesRepository.isIncognitoMode && it.message.unread) {
-                            showMessage(R.string.message_incognito_description)
-                        }
-                    }
-                } else {
-                    view?.run {
-                        showMessage(messageNotExists)
-                        popView()
+        }.logResourceStatus("message ${messageToLoad.messageId} preview").onResourceData {
+            if (it != null) {
+                message = it.message
+                attachments = it.attachments
+                view?.apply {
+                    setMessageWithAttachment(it)
+                    showContent(true)
+                    initOptions()
+                    updateMuteToggleButton(it.message.isMuted)
+                    if (preferencesRepository.isIncognitoMode && it.message.unread) {
+                        showMessage(R.string.message_incognito_description)
                     }
                 }
-            }
-            .onResourceSuccess {
-                if (it != null) {
-                    analytics.logEvent(
-                        "load_item",
-                        "type" to "message_preview",
-                        "length" to it.message.content.length
-                    )
+            } else {
+                view?.run {
+                    showMessage(messageNotExists)
+                    popView()
                 }
             }
-            .onResourceNotLoading { view?.showProgress(false) }
-            .onResourceError {
-                retryCallback = { onMessageLoadRetry(messageToLoad) }
-                errorHandler.dispatch(it)
+        }.onResourceSuccess {
+            if (it != null) {
+                analytics.logEvent(
+                    "load_item", "type" to "message_preview", "length" to it.message.content.length
+                )
             }
-            .launch()
+        }.onResourceNotLoading { view?.showProgress(false) }.onResourceError {
+            retryCallback = { onMessageLoadRetry(messageToLoad) }
+            errorHandler.dispatch(it)
+        }.launch()
     }
 
     fun onReply(): Boolean {
@@ -159,8 +151,7 @@ class MessagePreviewPresenter @Inject constructor(
             append("<div><h4>Od</h4>${message.sender}</div>")
             append("<div><h4>DO</h4>${message.recipients}</div>")
         }
-        val messageContent = "<p>${message.content}</p>"
-            .replace(Regex("[\\n\\r]{2,}"), "</p><p>")
+        val messageContent = "<p>${message.content}</p>".replace(Regex("[\\n\\r]{2,}"), "</p><p>")
             .replace(Regex("[\\n\\r]"), "<br>")
 
         val jobName = buildString {
@@ -171,9 +162,7 @@ class MessagePreviewPresenter @Inject constructor(
         }
 
         view?.apply {
-            val html = printHTML
-                .replace("%SUBJECT%", subject)
-                .replace("%CONTENT%", messageContent)
+            val html = printHTML.replace("%SUBJECT%", subject).replace("%CONTENT%", messageContent)
                 .replace("%INFO%", infoContent)
             printDocument(html, jobName)
         }
@@ -198,17 +187,15 @@ class MessagePreviewPresenter @Inject constructor(
                 val student = studentRepository.getCurrentStudent(decryptPass = true)
                 val mailbox = messageRepository.getMailboxByStudent(student)
                 messageRepository.deleteMessage(student, mailbox, message!!)
+            }.onFailure {
+                retryCallback = { onMessageDelete() }
+                errorHandler.dispatch(it)
+            }.onSuccess {
+                view?.run {
+                    showMessage(deleteMessageSuccessString)
+                    popView()
+                }
             }
-                .onFailure {
-                    retryCallback = { onMessageDelete() }
-                    errorHandler.dispatch(it)
-                }
-                .onSuccess {
-                    view?.run {
-                        showMessage(deleteMessageSuccessString)
-                        popView()
-                    }
-                }
 
             view?.showProgress(false)
         }
@@ -249,18 +236,25 @@ class MessagePreviewPresenter @Inject constructor(
         initOptions()
     }
 
-    fun onMute(): Boolean{
-        message ?: return false
-
-        message!!.isMuted = !message!!.isMuted
+    fun onMute(): Boolean {
+        val message = message ?: return false
+        message.isMuted = !message.isMuted
         presenterScope.launch {
-            when (message!!.isMuted) {
-                true -> messageRepository.muteMessage(message!!.correspondents, message!!.mailboxKey)
-                false -> messageRepository.unmuteMessage(message!!.correspondents, message!!.mailboxKey)
-            }
+            runCatching {
+                when (message.isMuted) {
+                    true -> messageRepository.muteMessage(
+                        message.correspondents, message.mailboxKey
+                    )
 
+                    false -> messageRepository.unmuteMessage(
+                        message.correspondents, message.mailboxKey
+                    )
+                }
+            }.onFailure {
+                errorHandler.dispatch(it)
+            }
         }
-        view?.updateMuteToggleButton(message!!.isMuted)
+        view?.updateMuteToggleButton(message.isMuted)
         return true
     }
 }
