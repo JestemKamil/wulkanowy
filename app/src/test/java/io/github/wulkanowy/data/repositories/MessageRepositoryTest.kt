@@ -80,6 +80,8 @@ class MessageRepositoryTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { refreshHelper.shouldBeRefreshed(any()) } returns false
+        coEvery { studentRepository.getCurrentStudent() } returns student
+        coEvery { mutesDb.checkMute(any(), eq(1)) } returns false
 
         repository = MessageRepository(
             messagesDb = messageDb,
