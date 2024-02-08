@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(tableName = "Mutes")
-data class Mute(
+@Entity(tableName = "MessageRecipientMutes")
+data class MessageRecipientMute(
     @ColumnInfo(name = "author")
     val author: String,
 
