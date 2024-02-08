@@ -72,7 +72,7 @@ class MessagePreviewPresenter @Inject constructor(
                         setMessageWithAttachment(it)
                         showContent(true)
                         initOptions()
-                        updateMuteButton(it.message.isMuted)
+                        updateMuteToggleButton(it.message.isMuted)
                         if (preferencesRepository.isIncognitoMode && it.message.unread) {
                             showMessage(R.string.message_incognito_description)
                         }
@@ -260,7 +260,7 @@ class MessagePreviewPresenter @Inject constructor(
             }
 
         }
-        view?.updateMuteButton(message!!.isMuted)
+        view?.updateMuteToggleButton(message!!.isMuted)
         return true
     }
 }

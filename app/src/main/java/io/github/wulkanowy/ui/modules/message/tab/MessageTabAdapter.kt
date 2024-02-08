@@ -18,8 +18,7 @@ import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
-class MessageTabAdapter @Inject constructor() :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageTabAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     lateinit var onItemClickListener: (MessageTabDataItem.MessageItem, position: Int) -> Unit
 
@@ -56,6 +55,7 @@ class MessageTabAdapter @Inject constructor() :
             MessageItemViewType.FILTERS -> HeaderViewHolder(
                 ItemMessageChipsBinding.inflate(inflater, parent, false)
             )
+
             MessageItemViewType.MESSAGE -> ItemViewHolder(
                 ItemMessageBinding.inflate(inflater, parent, false)
             )
@@ -139,7 +139,7 @@ class MessageTabAdapter @Inject constructor() :
             }
             messageItemUnreadIndicator.isVisible = message.unread || message.isMuted
 
-            when(message.isMuted) {
+            when (message.isMuted) {
                 true -> messageItemUnreadIndicator.setImageResource(R.drawable.ic_notifications_off)
                 else -> messageItemUnreadIndicator.setImageResource(R.drawable.ic_circle_notification)
             }
@@ -170,8 +170,7 @@ class MessageTabAdapter @Inject constructor() :
         RecyclerView.ViewHolder(binding.root)
 
     private class MessageTabDiffUtil(
-        private val old: List<MessageTabDataItem>,
-        private val new: List<MessageTabDataItem>
+        private val old: List<MessageTabDataItem>, private val new: List<MessageTabDataItem>
     ) : DiffUtil.Callback() {
 
         override fun getOldListSize(): Int = old.size

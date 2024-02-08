@@ -19,7 +19,7 @@ interface MessagePreviewView : BaseView {
 
     fun setMessageWithAttachment(item: MessageWithAttachment)
 
-    fun updateMuteButton(muted: Boolean)
+    fun updateMuteToggleButton(isMuted: Boolean)
 
     fun showProgress(show: Boolean)
 

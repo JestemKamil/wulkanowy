@@ -133,8 +133,8 @@ class MessagePreviewFragment :
         }
     }
 
-    override fun updateMuteButton(muted: Boolean) {
-        menuMuteButton?.setTitle(if (muted) R.string.message_unmute else R.string.message_mute)
+    override fun updateMuteToggleButton(isMuted: Boolean) {
+        menuMuteButton?.setTitle(if (isMuted) R.string.message_unmute else R.string.message_mute)
     }
 
     override fun showProgress(show: Boolean) {
