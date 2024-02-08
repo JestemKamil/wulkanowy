@@ -26,7 +26,7 @@ import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.dao.MobileDeviceDao
-import io.github.wulkanowy.data.db.dao.MessageRecipientMutesDao
+import io.github.wulkanowy.data.db.dao.MutedMessageSendersDao
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.dao.NotificationDao
 import io.github.wulkanowy.data.db.dao.RecipientDao
@@ -58,7 +58,7 @@ import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.db.entities.MobileDevice
-import io.github.wulkanowy.data.db.entities.MessageRecipientMute
+import io.github.wulkanowy.data.db.entities.MutedMessageSender
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Notification
 import io.github.wulkanowy.data.db.entities.Recipient
@@ -160,7 +160,7 @@ import javax.inject.Singleton
         SchoolAnnouncement::class,
         Notification::class,
         AdminMessage::class,
-        MessageRecipientMute::class,
+        MutedMessageSender::class,
         GradeDescriptive::class,
     ],
     autoMigrations = [
@@ -308,7 +308,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract val adminMessagesDao: AdminMessageDao
 
-    abstract val mutesDao: MessageRecipientMutesDao
+    abstract val mutesDao: MutedMessageSendersDao
   
     abstract val gradeDescriptiveDao: GradeDescriptiveDao
 }

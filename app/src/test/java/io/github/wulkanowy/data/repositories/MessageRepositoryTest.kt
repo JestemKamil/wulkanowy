@@ -6,7 +6,7 @@ import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
-import io.github.wulkanowy.data.db.dao.MessageRecipientMutesDao
+import io.github.wulkanowy.data.db.dao.MutedMessageSendersDao
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.enums.MessageFolder
@@ -50,7 +50,7 @@ class MessageRepositoryTest {
     private lateinit var studentRepository: StudentRepository
 
     @MockK
-    private lateinit var mutesDb: MessageRecipientMutesDao
+    private lateinit var mutesDb: MutedMessageSendersDao
 
     @MockK
     private lateinit var messageAttachmentDao: MessageAttachmentDao

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 60,
-    "identityHash": "6df29fe046af7d31e56eaad4337c4375",
+    "identityHash": "0b5c16d5a244c20abd1b7fc8d5dd8530",
     "entities": [
       {
         "tableName": "Students",
@@ -2449,7 +2449,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "MessageRecipientMutes",
+        "tableName": "MutedMessageSenders",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`author` TEXT NOT NULL, `user_id` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
@@ -2534,7 +2534,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6df29fe046af7d31e56eaad4337c4375')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b5c16d5a244c20abd1b7fc8d5dd8530')"
     ]
   }
 }

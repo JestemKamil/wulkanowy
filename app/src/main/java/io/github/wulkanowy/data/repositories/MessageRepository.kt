@@ -8,11 +8,11 @@ import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
-import io.github.wulkanowy.data.db.dao.MessageRecipientMutesDao
+import io.github.wulkanowy.data.db.dao.MutedMessageSendersDao
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
-import io.github.wulkanowy.data.db.entities.MessageRecipientMute
+import io.github.wulkanowy.data.db.entities.MutedMessageSender
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
@@ -45,7 +45,7 @@ import javax.inject.Singleton
 class MessageRepository @Inject constructor(
     private val messagesDb: MessagesDao,
     private val studentRepository: StudentRepository,
-    private val mutesDb: MessageRecipientMutesDao,
+    private val mutesDb: MutedMessageSendersDao,
     private val messageAttachmentDao: MessageAttachmentDao,
     private val sdk: Sdk,
     @ApplicationContext private val context: Context,
@@ -257,7 +257,7 @@ class MessageRepository @Inject constructor(
     suspend fun muteMessage(author: String, mailboxKey: String) {
         if(isMuted(author)) return
         val student = studentRepository.getCurrentStudent()
-        mutesDb.insertMute(MessageRecipientMute(author, student.userLoginId))
+        mutesDb.insertMute(MutedMessageSender(author, student.userLoginId))
         messagesDb.muteMessagesByAuthor(author, mailboxKey)
     }
 
