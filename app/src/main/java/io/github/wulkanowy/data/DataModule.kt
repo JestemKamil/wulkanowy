@@ -257,4 +257,8 @@ internal class DataModule {
     @Singleton
     @Provides
     fun provideMutesDao(database: AppDatabase) = database.mutesDao
+
+    @Singleton
+    @Provides
+    fun provideGradeDescriptiveDao(database: AppDatabase) = database.gradeDescriptiveDao
 }
