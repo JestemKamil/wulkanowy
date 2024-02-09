@@ -34,6 +34,7 @@ import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -89,7 +90,6 @@ class MessageRepository @Inject constructor(
             messagesDb.deleteAll(old uniqueSubtract new)
             messagesDb.insertAll((new uniqueSubtract old).onEach {
                 val muted = isMuted(it.correspondents)
-                //it.isMuted = muted
                 it.isNotified = !notify || muted
                 it.unread = when {
                     muted -> false
@@ -115,7 +115,11 @@ class MessageRepository @Inject constructor(
             (it.message.unread && markAsRead) || it.message.content.isBlank()
         },
         query = {
-            messagesDb.loadMessageWithAttachment(message.messageGlobalKey)
+            messagesDb.loadMessageWithAttachment(message.messageGlobalKey).onEach {
+                if (it != null) {
+                    it.message.isMuted = isMuted(it.message.correspondents)
+                }
+            }
         },
         fetch = {
             sdk.init(student).getMessageDetails(
@@ -245,7 +249,7 @@ class MessageRepository @Inject constructor(
             value?.let { json.encodeToString(it) }
         )
 
-    private suspend fun isMuted(author: String): Boolean {
+    suspend fun isMuted(author: String): Boolean {
         return mutesDb.checkMute(author)
     }
 
