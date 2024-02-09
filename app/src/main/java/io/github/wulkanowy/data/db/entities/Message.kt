@@ -41,7 +41,6 @@ data class Message(
     @ColumnInfo(name = "has_attachments")
     val hasAttachments: Boolean,
 
-    @ColumnInfo(name = "is_muted", defaultValue = "0")
     var isMuted: Boolean = false
 
 ) : Serializable {

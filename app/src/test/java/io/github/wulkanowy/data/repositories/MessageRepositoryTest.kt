@@ -20,9 +20,16 @@ import io.github.wulkanowy.sdk.pojo.Folder
 import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.Status
 import io.github.wulkanowy.utils.status
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.checkEquals
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
+import io.mockk.just
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
@@ -45,9 +52,6 @@ class MessageRepositoryTest {
 
     @MockK
     private lateinit var messageDb: MessagesDao
-
-    @MockK
-    private lateinit var studentRepository: StudentRepository
 
     @MockK
     private lateinit var mutesDb: MutedMessageSendersDao
@@ -80,13 +84,11 @@ class MessageRepositoryTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { refreshHelper.shouldBeRefreshed(any()) } returns false
-        coEvery { studentRepository.getCurrentStudent() } returns student
-        coEvery { mutesDb.checkMute(any(), eq(1)) } returns false
+        coEvery { mutesDb.checkMute(any()) } returns false
 
         repository = MessageRepository(
             messagesDb = messageDb,
             mutesDb = mutesDb,
-            studentRepository = studentRepository,
             messageAttachmentDao = messageAttachmentDao,
             sdk = sdk,
             context = context,

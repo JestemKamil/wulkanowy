@@ -9,9 +9,6 @@ import java.io.Serializable
 data class MutedMessageSender(
     @ColumnInfo(name = "author")
     val author: String,
-
-    @ColumnInfo(name = "user_id")
-    val userId: Int
 ) : Serializable {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

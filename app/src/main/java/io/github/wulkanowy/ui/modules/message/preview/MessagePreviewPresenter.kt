@@ -238,17 +238,13 @@ class MessagePreviewPresenter @Inject constructor(
 
     fun onMute(): Boolean {
         val message = message ?: return false
-        message.isMuted = !message.isMuted
+        //message.isMuted = !message.isMuted
         presenterScope.launch {
             runCatching {
                 when (message.isMuted) {
-                    true -> messageRepository.muteMessage(
-                        message.correspondents, message.mailboxKey
-                    )
+                    true -> messageRepository.muteMessage(message.correspondents)
 
-                    false -> messageRepository.unmuteMessage(
-                        message.correspondents, message.mailboxKey
-                    )
+                    false -> messageRepository.unmuteMessage(message.correspondents)
                 }
             }.onFailure {
                 errorHandler.dispatch(it)

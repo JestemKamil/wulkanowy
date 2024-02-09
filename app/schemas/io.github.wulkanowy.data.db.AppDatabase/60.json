@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 60,
-    "identityHash": "0b5c16d5a244c20abd1b7fc8d5dd8530",
+    "identityHash": "7409a9b9bcdeed83964ffe34d3564fd0",
     "entities": [
       {
         "tableName": "Students",
@@ -1089,7 +1089,7 @@
       },
       {
         "tableName": "Messages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`email` TEXT NOT NULL, `message_global_key` TEXT NOT NULL, `mailbox_key` TEXT NOT NULL, `message_id` INTEGER NOT NULL, `correspondents` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `read_by` INTEGER, `unread_by` INTEGER, `has_attachments` INTEGER NOT NULL, `is_muted` INTEGER NOT NULL DEFAULT 0, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `content` TEXT NOT NULL, `sender` TEXT, `recipients` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`email` TEXT NOT NULL, `message_global_key` TEXT NOT NULL, `mailbox_key` TEXT NOT NULL, `message_id` INTEGER NOT NULL, `correspondents` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `read_by` INTEGER, `unread_by` INTEGER, `has_attachments` INTEGER NOT NULL, `isMuted` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `content` TEXT NOT NULL, `sender` TEXT, `recipients` TEXT)",
         "fields": [
           {
             "fieldPath": "email",
@@ -1165,10 +1165,9 @@
           },
           {
             "fieldPath": "isMuted",
-            "columnName": "is_muted",
+            "columnName": "isMuted",
             "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
+            "notNull": true
           },
           {
             "fieldPath": "id",
@@ -2450,18 +2449,12 @@
       },
       {
         "tableName": "MutedMessageSenders",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`author` TEXT NOT NULL, `user_id` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`author` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "author",
             "columnName": "author",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "userId",
-            "columnName": "user_id",
-            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -2534,7 +2527,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b5c16d5a244c20abd1b7fc8d5dd8530')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7409a9b9bcdeed83964ffe34d3564fd0')"
     ]
   }
 }

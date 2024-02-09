@@ -19,11 +19,4 @@ interface MessagesDao : BaseDao<Message> {
 
     @Query("SELECT * FROM Messages WHERE email = :email AND folder_id = :folder ORDER BY date DESC")
     fun loadAll(folder: Int, email: String): Flow<List<Message>>
-
-    @Query("UPDATE messages SET is_muted = 1 WHERE correspondents = :author AND mailbox_key = :mailboxKey")
-    suspend fun muteMessagesByAuthor(author: String, mailboxKey: String)
-
-    @Query("UPDATE messages SET is_muted = 0 WHERE correspondents = :author AND mailbox_key = :mailboxKey")
-    suspend fun unmuteMessagesByAuthor(author: String, mailboxKey: String)
-
 }
