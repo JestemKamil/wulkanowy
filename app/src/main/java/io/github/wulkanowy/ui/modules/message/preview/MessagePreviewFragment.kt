@@ -221,7 +221,7 @@ class MessagePreviewFragment :
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(MESSAGE_ID_KEY, presenter.message)
+        outState.putSerializable(MESSAGE_ID_KEY, presenter.messageWithAttachments)
         super.onSaveInstanceState(outState)
     }
 

@@ -8,5 +8,5 @@ data class MessageWithMutedAuthor(
     val message: Message,
 
     @Relation(parentColumn = "correspondents", entityColumn = "author")
-    val mutedMessageSender: MutedMessageSender
+    val mutedMessageSender: MutedMessageSender?,
 )

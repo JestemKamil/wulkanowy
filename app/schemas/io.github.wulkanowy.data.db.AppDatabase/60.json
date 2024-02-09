@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 60,
-    "identityHash": "7409a9b9bcdeed83964ffe34d3564fd0",
+    "identityHash": "3672d3f4d5e6b874e5a22d2bb458dc65",
     "entities": [
       {
         "tableName": "Students",
@@ -1089,7 +1089,7 @@
       },
       {
         "tableName": "Messages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`email` TEXT NOT NULL, `message_global_key` TEXT NOT NULL, `mailbox_key` TEXT NOT NULL, `message_id` INTEGER NOT NULL, `correspondents` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `read_by` INTEGER, `unread_by` INTEGER, `has_attachments` INTEGER NOT NULL, `isMuted` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `content` TEXT NOT NULL, `sender` TEXT, `recipients` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`email` TEXT NOT NULL, `message_global_key` TEXT NOT NULL, `mailbox_key` TEXT NOT NULL, `message_id` INTEGER NOT NULL, `correspondents` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `read_by` INTEGER, `unread_by` INTEGER, `has_attachments` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `content` TEXT NOT NULL, `sender` TEXT, `recipients` TEXT)",
         "fields": [
           {
             "fieldPath": "email",
@@ -1160,12 +1160,6 @@
           {
             "fieldPath": "hasAttachments",
             "columnName": "has_attachments",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isMuted",
-            "columnName": "isMuted",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -2527,7 +2521,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7409a9b9bcdeed83964ffe34d3564fd0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3672d3f4d5e6b874e5a22d2bb458dc65')"
     ]
   }
 }

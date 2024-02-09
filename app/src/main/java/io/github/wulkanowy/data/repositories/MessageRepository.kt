@@ -12,6 +12,7 @@ import io.github.wulkanowy.data.db.dao.MutedMessageSendersDao
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
+import io.github.wulkanowy.data.db.entities.MessageWithMutedAuthor
 import io.github.wulkanowy.data.db.entities.MutedMessageSender
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
@@ -66,7 +67,7 @@ class MessageRepository @Inject constructor(
         folder: MessageFolder,
         forceRefresh: Boolean,
         notify: Boolean = false,
-    ): Flow<Resource<List<Message>>> = networkBoundResource(
+    ): Flow<Resource<List<MessageWithMutedAuthor>>> = networkBoundResource(
         mutex = saveFetchResultMutex,
         isResultEmpty = { it.isEmpty() },
         shouldFetch = {
@@ -77,8 +78,8 @@ class MessageRepository @Inject constructor(
         },
         query = {
             if (mailbox == null) {
-                messagesDb.loadAll(folder.id, student.email)
-            } else messagesDb.loadAll(mailbox.globalKey, folder.id)
+                messagesDb.loadMessagesWithMutedAuthor(folder.id, student.email)
+            } else messagesDb.loadMessagesWithMutedAuthor(mailbox.globalKey, folder.id)
         },
         fetch = {
             sdk.init(student).getMessages(
@@ -86,7 +87,8 @@ class MessageRepository @Inject constructor(
                 mailboxKey = mailbox?.globalKey,
             ).mapToEntities(student, mailbox, mailboxDao.loadAll(student.email))
         },
-        saveFetchResult = { old, new ->
+        saveFetchResult = { oldWithAuthors, new ->
+            val old = oldWithAuthors.map { it.message }
             messagesDb.deleteAll(old uniqueSubtract new)
             messagesDb.insertAll((new uniqueSubtract old).onEach {
                 val muted = isMuted(it.correspondents)
@@ -114,13 +116,7 @@ class MessageRepository @Inject constructor(
             Timber.d("Message content in db empty: ${it.message.content.isBlank()}")
             (it.message.unread && markAsRead) || it.message.content.isBlank()
         },
-        query = {
-            messagesDb.loadMessageWithAttachment(message.messageGlobalKey).onEach {
-                if (it != null) {
-                    it.message.isMuted = isMuted(it.message.correspondents)
-                }
-            }
-        },
+        query = { messagesDb.loadMessageWithAttachment(message.messageGlobalKey) },
         fetch = {
             sdk.init(student).getMessageDetails(
                 messageKey = it!!.message.messageGlobalKey,

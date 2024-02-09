@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.db
 
-import Migration60
 import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
@@ -173,6 +172,7 @@ import javax.inject.Singleton
         AutoMigration(from = 56, to = 57, spec = Migration57::class),
         AutoMigration(from = 57, to = 58, spec = Migration58::class),
         AutoMigration(from = 58, to = 59),
+        AutoMigration(from = 59, to = 60),
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -233,7 +233,6 @@ abstract class AppDatabase : RoomDatabase() {
             Migration51(),
             Migration53(),
             Migration54(),
-            Migration60(),
         )
 
         fun newInstance(
