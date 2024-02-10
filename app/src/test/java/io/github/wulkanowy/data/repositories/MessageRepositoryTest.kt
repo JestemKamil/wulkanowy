@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.dao.MutedMessageSendersDao
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
+import io.github.wulkanowy.data.db.entities.MutedMessageSender
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.toFirstResult
@@ -85,7 +86,18 @@ class MessageRepositoryTest {
         MockKAnnotations.init(this)
         every { refreshHelper.shouldBeRefreshed(any()) } returns false
         coEvery { mutesDb.checkMute(any()) } returns false
-
+        coEvery {
+            messageDb.loadMessagesWithMutedAuthor(
+                mailboxKey = any(),
+                folder = any()
+            )
+        } returns flowOf(emptyList())
+        coEvery {
+            messageDb.loadMessagesWithMutedAuthor(
+                folder = any(),
+                email = any()
+            )
+        } returns flowOf(emptyList())
         repository = MessageRepository(
             messagesDb = messageDb,
             mutesDb = mutesDb,
@@ -144,7 +156,11 @@ class MessageRepositoryTest {
     @Test
     fun `get message when content already in db`() {
         val testMessage = getMessageEntity(123, "Test", false)
-        val messageWithAttachment = MessageWithAttachment(testMessage, emptyList())
+        val messageWithAttachment = MessageWithAttachment(
+            testMessage,
+            emptyList(),
+            MutedMessageSender("Jan Kowalski - P - (WULKANOWY)")
+        )
 
         coEvery { messageDb.loadMessageWithAttachment("v4") } returns flowOf(
             messageWithAttachment
@@ -162,8 +178,16 @@ class MessageRepositoryTest {
         val testMessage = getMessageEntity(123, "", true)
         val testMessageWithContent = testMessage.copy().apply { content = "Test" }
 
-        val mWa = MessageWithAttachment(testMessage, emptyList())
-        val mWaWithContent = MessageWithAttachment(testMessageWithContent, emptyList())
+        val mWa = MessageWithAttachment(
+            testMessage,
+            emptyList(),
+            MutedMessageSender("Jan Kowalski - P - (WULKANOWY)")
+        )
+        val mWaWithContent = MessageWithAttachment(
+            testMessageWithContent,
+            emptyList(),
+            MutedMessageSender("Jan Kowalski - P - (WULKANOWY)")
+        )
 
         coEvery {
             messageDb.loadMessageWithAttachment("v4")
