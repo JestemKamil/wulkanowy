@@ -45,7 +45,7 @@ import javax.inject.Singleton
 @Singleton
 class MessageRepository @Inject constructor(
     private val messagesDb: MessagesDao,
-    private val mutesDb: MutedMessageSendersDao,
+    private val mutedMessageSendersDao: MutedMessageSendersDao,
     private val messageAttachmentDao: MessageAttachmentDao,
     private val sdk: Sdk,
     @ApplicationContext private val context: Context,
@@ -92,10 +92,6 @@ class MessageRepository @Inject constructor(
             messagesDb.insertAll((new uniqueSubtract old).onEach {
                 val muted = isMuted(it.correspondents)
                 it.isNotified = !notify || muted
-                it.unread = when {
-                    muted -> false
-                    else -> it.unread
-                }
             })
 
             refreshHelper.updateLastRefreshTimestamp(
@@ -245,16 +241,16 @@ class MessageRepository @Inject constructor(
         )
 
     suspend fun isMuted(author: String): Boolean {
-        return mutesDb.checkMute(author)
+        return mutedMessageSendersDao.checkMute(author)
     }
 
     suspend fun muteMessage(author: String) {
         if (isMuted(author)) return
-        mutesDb.insertMute(MutedMessageSender(author))
+        mutedMessageSendersDao.insertMute(MutedMessageSender(author))
     }
 
     suspend fun unmuteMessage(author: String) {
         if (!isMuted(author)) return
-        mutesDb.deleteMute(author)
+        mutedMessageSendersDao.deleteMute(author)
     }
 }

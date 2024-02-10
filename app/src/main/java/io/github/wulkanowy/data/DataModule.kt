@@ -256,7 +256,7 @@ internal class DataModule {
 
     @Singleton
     @Provides
-    fun provideMutesDao(database: AppDatabase) = database.mutesDao
+    fun provideMutesDao(database: AppDatabase) = database.mutedMessageSendersDao
 
     @Singleton
     @Provides

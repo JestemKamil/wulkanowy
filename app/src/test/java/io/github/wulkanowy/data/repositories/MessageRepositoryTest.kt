@@ -100,7 +100,7 @@ class MessageRepositoryTest {
         } returns flowOf(emptyList())
         repository = MessageRepository(
             messagesDb = messageDb,
-            mutesDb = mutesDb,
+            mutedMessageSendersDao = mutesDb,
             messageAttachmentDao = messageAttachmentDao,
             sdk = sdk,
             context = context,

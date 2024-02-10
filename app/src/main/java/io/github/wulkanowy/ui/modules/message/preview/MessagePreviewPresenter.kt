@@ -59,34 +59,38 @@ class MessagePreviewPresenter @Inject constructor(
                 message = messageToLoad,
                 markAsRead = !preferencesRepository.isIncognitoMode,
             )
-        }.logResourceStatus("message ${messageToLoad.messageId} preview").onResourceData {
-            if (it != null) {
-                messageWithAttachments = it
-                view?.apply {
-                    setMessageWithAttachment(it)
-                    showContent(true)
-                    initOptions()
-                    updateMuteToggleButton(isMuted = it.mutedMessageSender != null)
-                    if (preferencesRepository.isIncognitoMode && it.message.unread) {
-                        showMessage(R.string.message_incognito_description)
+        }
+            .logResourceStatus("message ${messageToLoad.messageId} preview")
+            .onResourceData {
+                if (it != null) {
+                    messageWithAttachments = it
+                    view?.apply {
+                        setMessageWithAttachment(it)
+                        showContent(true)
+                        initOptions()
+                        updateMuteToggleButton(isMuted = it.mutedMessageSender != null)
+                        if (preferencesRepository.isIncognitoMode && it.message.unread) {
+                            showMessage(R.string.message_incognito_description)
+                        }
+                    }
+                } else {
+                    view?.run {
+                        showMessage(messageNotExists)
+                        popView()
                     }
                 }
-            } else {
-                view?.run {
-                    showMessage(messageNotExists)
-                    popView()
+            }.onResourceSuccess {
+                if (it != null) {
+                    analytics.logEvent(
+                        "load_item",
+                        "type" to "message_preview",
+                        "length" to it.message.content.length
+                    )
                 }
-            }
-        }.onResourceSuccess {
-            if (it != null) {
-                analytics.logEvent(
-                    "load_item", "type" to "message_preview", "length" to it.message.content.length
-                )
-            }
-        }.onResourceNotLoading { view?.showProgress(false) }.onResourceError {
-            retryCallback = { onMessageLoadRetry(messageToLoad) }
-            errorHandler.dispatch(it)
-        }.launch()
+            }.onResourceNotLoading { view?.showProgress(false) }.onResourceError {
+                retryCallback = { onMessageLoadRetry(messageToLoad) }
+                errorHandler.dispatch(it)
+            }.launch()
     }
 
     fun onReply(): Boolean {

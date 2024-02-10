@@ -158,7 +158,7 @@ class MessagePreviewFragment :
         menuDeleteButton?.isVisible = show
         menuShareButton?.isVisible = show
         menuPrintButton?.isVisible = show
-        menuMuteButton?.isVisible = show
+        menuMuteButton?.isVisible = show && isReplayable
     }
 
     override fun setDeletedOptionsLabels() {
