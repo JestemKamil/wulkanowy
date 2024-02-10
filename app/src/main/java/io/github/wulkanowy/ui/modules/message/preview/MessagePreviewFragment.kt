@@ -58,6 +58,12 @@ class MessagePreviewFragment :
     override val deleteMessageSuccessString: String
         get() = getString(R.string.message_delete_success)
 
+    override val muteMessageSuccessString: String
+        get() = getString(R.string.message_mute_success)
+
+    override val unmuteMessageSuccessString: String
+        get() = getString(R.string.message_unmute_success)
+
     override val messageNoSubjectString: String
         get() = getString(R.string.message_no_subject)
 
@@ -135,6 +141,7 @@ class MessagePreviewFragment :
 
     override fun updateMuteToggleButton(isMuted: Boolean) {
         menuMuteButton?.setTitle(if (isMuted) R.string.message_unmute else R.string.message_mute)
+
     }
 
     override fun showProgress(show: Boolean) {
@@ -151,6 +158,7 @@ class MessagePreviewFragment :
         menuDeleteButton?.isVisible = show
         menuShareButton?.isVisible = show
         menuPrintButton?.isVisible = show
+        menuMuteButton?.isVisible = show
     }
 
     override fun setDeletedOptionsLabels() {

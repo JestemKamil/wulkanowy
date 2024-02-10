@@ -241,8 +241,15 @@ class MessagePreviewPresenter @Inject constructor(
         presenterScope.launch {
             runCatching {
                 when (isMuted) {
-                    true -> messageRepository.unmuteMessage(message.correspondents)
-                    false -> messageRepository.muteMessage(message.correspondents)
+                    true -> {
+                        messageRepository.unmuteMessage(message.correspondents)
+                        view?.run { showMessage(unmuteMessageSuccessString) }
+                    }
+
+                    false -> {
+                        messageRepository.muteMessage(message.correspondents)
+                        view?.run { showMessage(muteMessageSuccessString) }
+                    }
                 }
             }.onFailure {
                 errorHandler.dispatch(it)
